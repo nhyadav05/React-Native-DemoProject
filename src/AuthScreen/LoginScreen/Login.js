@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Alert,
   Image,
@@ -10,34 +10,58 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
+  Switch,
 } from 'react-native';
 
 const facebook = require('../../assets/facebook.png');
 const twitter = require('../../assets/twitter.png');
 const linkedin = require('../../assets/linkedin.png');
+const eyeIcon = require('../../assets/eye-icon.png'); // Replace with your actual eye icon path
 
-export default function Login({ navigation }) {
+export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [click, setClick] = useState(false);
 
   const handleLogin = () => {
-    // Dummy login function
-    if (email && password) {
-      navigation.navigate('Dashboard');
-    } else {
+    if (!email.trim() || !password.trim()) {
       Alert.alert('Login failed', 'Please enter email and password');
+    } else if (!isValidEmail(email.trim())) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address');
+    } else if (!isValidCredentials(email.trim(), password.trim())) {
+      Alert.alert('Login failed', 'Email and password do not match');
+    } else {
+      navigation.navigate('Dashboard');
     }
+  };
+
+  const isValidEmail = email => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const isValidCredentials = (email, password) => {
+    // Replace with your actual validation logic, this is just a dummy example
+    return email === 'test@example.com' && password === 'password123';
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <Image source={require('../../assets/login-illustration.png')} style={styles.headerImage} />
-          <Text style={styles.headerText}>Welcome To Little Drop, where you manage your daily tasks</Text>
+          <Image
+            source={require('../../assets/login-illustration.png')}
+            style={styles.headerImage}
+          />
+          <Text style={styles.headerText}>
+            Welcome To Little Drop, where you manage your daily tasks
+          </Text>
         </View>
 
         <View style={styles.form}>
@@ -46,21 +70,43 @@ export default function Login({ navigation }) {
             placeholder="Email"
             value={email}
             onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
-          <TextInput
-            style={[styles.input, styles.shadowProp]}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <TouchableOpacity onPress={() => navigation.navigate('ForgotEmail')}>
-            <Text style={styles.linkText}>Forgot Email?</Text>
-          </TouchableOpacity>
+          <View
+            style={[styles.input, styles.shadowProp, styles.passwordContainer]}>
+            <TextInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              style={styles.passwordInput}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Image source={eyeIcon} style={styles.eyeIcon} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.forgotContainer}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotEmail')}>
+              <Text style={styles.linkText}>Forgot Email?</Text>
+            </TouchableOpacity> */}
+
+            <View style={styles.switch}>
+              <Switch
+                value={click}
+                onValueChange={setClick}
+                trackColor={{true: 'green', false: 'gray'}}
+              />
+              <Text style={styles.rememberText}>Remember Me</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotEmail')}>
+              <Text style={styles.linkText}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             style={[styles.button, styles.shadowProp]}
-            onPress={handleLogin}
-          >
+            onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
 
@@ -68,8 +114,7 @@ export default function Login({ navigation }) {
 
           <TouchableOpacity
             style={[styles.button, styles.shadowProp]}
-            onPress={() => navigation.navigate('Signup')}
-          >
+            onPress={() => navigation.navigate('Signup')}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -131,6 +176,35 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFFFFF', // Ensure the background color is white for shadow visibility
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  eyeIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#666666',
+  },
+  forgotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 15,
+  },
+  switch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rememberText: {
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  linkText: {
+    color: '#00529D',
+  },
   button: {
     width: '100%',
     height: 50,
@@ -169,7 +243,7 @@ const styles = StyleSheet.create({
   },
   shadowProp: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5, // Adds shadow for Android

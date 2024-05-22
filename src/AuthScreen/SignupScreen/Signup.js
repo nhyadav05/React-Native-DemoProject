@@ -6,8 +6,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View,Image
 } from 'react-native';
+
+const SignUp = require('../../assets/SignUp.png');
+
 
 const Signup = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -21,6 +24,10 @@ const Signup = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backText}>Go Back</Text>
         </TouchableOpacity>
+        <Image
+            source={SignUp}
+            style={styles.SignUpImage}
+          />
         <Text style={styles.title}>Create Account</Text>
       </View>
 
@@ -101,6 +108,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+
+  SignUpImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+  },
   backButton: {
     alignSelf: 'flex-start',
     marginBottom: 10,
@@ -115,7 +128,7 @@ const styles = StyleSheet.create({
     color: '#00529D',
   },
   inputView: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   input: {
     height: 50,
@@ -128,7 +141,7 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   button: {
     width: '100%',
@@ -146,7 +159,7 @@ const styles = StyleSheet.create({
   orText: {
     color: '#AAAAAA',
     textAlign: 'center',
-    marginVertical: 10,
+    marginVertical: 2,
   },
   socialLogin: {
     flexDirection: 'row',
@@ -167,7 +180,7 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: 'center',
     color: '#666666',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   linkText: {
     color: '#00529D',
