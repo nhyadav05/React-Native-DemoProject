@@ -1,15 +1,16 @@
 import { Text, View, SafeAreaView, StatusBar,StyleSheet } from "react-native";
 import React,{useEffect} from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 import Navigation from "./src/navigation/Navigation";
+import store from "./src/redux/store/store";
 
 
 export default function App() {
   return (
    
-        <SafeAreaProvider>
-          <Navigation/>
-        </SafeAreaProvider>
+    <Provider store={store}>
+    <Navigation />
+  </Provider>
 
   );
 }
