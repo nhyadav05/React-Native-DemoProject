@@ -1,22 +1,32 @@
+// ForgotEmail.js
+
 import React, { useState } from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View,Image } from 'react-native';
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { forgotPassword } from '../../redux/reducer/authReducer'; // Adjust the path accordingly
+import axios from 'axios'; // Import axios here
 
 const Forgotpassword1 = require('../../assets/Forgotpassword1.png');
 
-export default function ForgotEmail({ navigation }) {
+const ForgotEmail = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
 
-  const handleForgotEmail = () => {
-    // Implement the forgot email API call here
-    Alert.alert('Password reset link sent to your email');
+  const handleForgotEmail = async () => {
+    try {
+      // Dispatch the forgotPassword action with the entered email
+      dispatch(forgotPassword({ email }));
+      Alert.alert('Password Reset Link Sent', 'Check your email for the password reset link.');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to send password reset link. Please try again later.');
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-    <View style={styles.header}>
-      <Image source={Forgotpassword1} style={styles.forgotEImage} />
+      <View style={styles.header}>
+        <Image source={Forgotpassword1} style={styles.forgotEImage} />
       </View>
-
       <View style={styles.form}>
         <TextInput
           style={styles.input}
@@ -33,7 +43,7 @@ export default function ForgotEmail({ navigation }) {
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -83,3 +93,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+export default ForgotEmail;

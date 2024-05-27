@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   Alert,
   Image,
@@ -12,7 +12,9 @@ import {
   Platform,
   Switch,
 } from 'react-native';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUser} from '../../redux/reducer/authReducer';
+import { useIsFocused } from '@react-navigation/native';
 const facebook = require('../../assets/facebook.png');
 const twitter = require('../../assets/twitter.png');
 const linkedin = require('../../assets/linkedin.png');
@@ -22,32 +24,33 @@ export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const {loading, error} = useSelector(state => state.auth);
   const [click, setClick] = useState(false);
+  const isFocused = useIsFocused();
 
-  const handleLogin = () => {
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Login failed', 'Please enter email and password');
-    } else if (!isValidEmail(email.trim())) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address');
-    } else if (!isValidCredentials(email.trim(), password.trim())) {
-      Alert.alert('Login failed', 'Email and password do not match');
-    } else {
-      navigation.navigate('Dashboard');
+  const handleLogin = async () => {
+    try {
+        if (!email.trim() || !password.trim()) {
+            throw new Error('Please enter email and password');
+        } else {
+        await  dispatch(loginUser({ email, password }));
+            // Navigate to Dashboard upon successful login
+            navigation.navigate('Dashboard');
+        }
+        Alert.alert('Login successful');
+        dispatch(sendAuthEmail(email)); 
+    } catch (error) {
+        console.error('Login failed:', error.message);
+        Alert.alert('Login failed', error.message);
     }
-  };
+};
 
-  const isValidEmail = email => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
-
-  const isValidCredentials = (email, password) => {
-    // Replace with your actual validation logic, this is just a dummy example
-    return email === 'test@example.com' && password === 'password123';
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+useEffect(() => {
+  // Reset input fields when login screen is focused again
+  setEmail('');
+  setPassword('');
+}, [isFocused]);
 
   return (
     <KeyboardAvoidingView
@@ -82,7 +85,7 @@ export default function Login({navigation}) {
               secureTextEntry={!showPassword}
               style={styles.passwordInput}
             />
-            <TouchableOpacity onPress={togglePasswordVisibility}>
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Image source={eyeIcon} style={styles.eyeIcon} />
             </TouchableOpacity>
           </View>
@@ -104,10 +107,14 @@ export default function Login({navigation}) {
               <Text style={styles.linkText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
+          {error && <Text style={styles.errorText}>{error}</Text>}
+
           <TouchableOpacity
             style={[styles.button, styles.shadowProp]}
             onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>
+              {Login ? 'Login' : ' Loading...'}
+            </Text>
           </TouchableOpacity>
 
           <Text style={styles.orText}>OR</Text>
@@ -137,7 +144,6 @@ export default function Login({navigation}) {
     </KeyboardAvoidingView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -6,28 +6,57 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,Image
+  View,
+  Image,
 } from 'react-native';
-
+import {useDispatch} from 'react-redux';
+import {signupUser} from '../../redux/reducer/authReducer';
+const eyeIcon = require('../../assets/eye-icon.png'); // Replace with your actual eye icon path
 const SignUp = require('../../assets/SignUp.png');
 
-
-const Signup = ({ navigation }) => {
+const Signup = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleSignup = async () => {
+    try {
+      // Basic form validation
+      if (
+        !username.trim() ||
+        !email.trim() ||
+        !password.trim() ||
+        !confirmPassword.trim()
+      ) {
+        throw new Error('Please fill in all fields');
+      }
+      if (password !== confirmPassword) {
+        throw new Error('Passwords do not match');
+      }
+      // Dispatch the signupUser action with the form data
+      await dispatch(signupUser({ username: username, email: email, password: password }));
+      // Optionally, you can navigate to another screen after successful signup
+      navigation.navigate('Dashboard');
+    } catch (error) {
+      const errorMessage = error && error.message ? error.message : 'An error occurred';
+      console.error('Signup failed:', errorMessage);
+      Alert.alert('Signup failed', errorMessage);
+    }
+  };
+  
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}>
           <Text style={styles.backText}>Go Back</Text>
         </TouchableOpacity>
-        <Image
-            source={SignUp}
-            style={styles.SignUpImage}
-          />
+        <Image source={SignUp} style={styles.SignUpImage} />
         <Text style={styles.title}>Create Account</Text>
       </View>
 
@@ -45,26 +74,39 @@ const Signup = ({ navigation }) => {
           onChangeText={setEmail}
           keyboardType="email-address"
         />
-        <TextInput
-          style={[styles.input, styles.shadowProp]}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TextInput
-          style={[styles.input, styles.shadowProp]}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
+        <View
+          style={[styles.input, styles.shadowProp, styles.passwordContainer]}>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPass}
+            style={styles.passwordInput}
+          />
+          <TouchableOpacity onPress={() => setShowPass(!showPass)}>
+            <Image source={eyeIcon} style={styles.eyeIcon} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[styles.input, styles.shadowProp, styles.passwordContainer]}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={!showPass}
+          />
+          <TouchableOpacity onPress={() => setShowPass(!showPass)}>
+            <Image source={eyeIcon} style={styles.eyeIcon} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.buttonView}>
         <TouchableOpacity
           style={[styles.button, styles.shadowProp]}
-          onPress={() => Alert.alert('Sign Up button pressed')}
+          onPress={handleSignup}
+          // onPress={() => Alert.alert('Sign Up button pressed')}
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
@@ -82,12 +124,15 @@ const Signup = ({ navigation }) => {
       </View>
 
       <Text style={styles.footerText}>
-        By signing up you agree to the <Text style={styles.linkText}>Terms of service</Text>.
+        By signing up you agree to the{' '}
+        <Text style={styles.linkText}>Terms of service</Text>.
       </Text>
 
       <Text style={styles.footerText}>
         Already have an account?{' '}
-        <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>
+        <Text
+          style={styles.linkText}
+          onPress={() => navigation.navigate('Login')}>
           Login now
         </Text>
       </Text>
@@ -188,9 +233,21 @@ const styles = StyleSheet.create({
   },
   shadowProp: {
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  eyeIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#666666',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
   },
 });
