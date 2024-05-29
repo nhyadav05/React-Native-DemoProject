@@ -1,31 +1,3 @@
-// import React from 'react';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import { NavigationContainer } from '@react-navigation/native';
-
-
-// import Splash from '../screen/SplashScreen/Splash';
-// import Login from '../AuthScreen/LoginScreen/Login';
-// import Signup from '../AuthScreen/SignupScreen/Signup';
-// import DashBoard from '../screen/DashboardScreen/DashBoard';
-
-// const Stack = createNativeStackNavigator();
-
-// const Navigation = () => {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
-//       <Stack.Screen name="Splash" component={Splash} />
-//         <Stack.Screen name="Login" component={Login} />
-//         <Stack.Screen name="Signup" component={Signup} />
-
-//         <Stack.Screen name="DashBoard" component={DashBoard} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// };
-
-// export default Navigation;
-
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,6 +8,7 @@ import Login from '../AuthScreen/LoginScreen/Login';
 import DashBoard from '../screen/DashboardScreen/DashBoard';
 import ForgotEmail from '../AuthScreen/ForgotEmailScreen/ForgotEmail';
 import MobileOtp from '../AuthScreen/MobileOtpScreen/MobileOtp';
+import OnboardingScreen from '../screen/SplashScreen/OnboardingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,6 +19,8 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="ForgotEmail" component={ForgotEmail} />

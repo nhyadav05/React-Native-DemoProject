@@ -17,7 +17,7 @@ const Splash = ({navigation}) => {
 
   const navigationFun = () => {
     setTimeout(() => {
-      navigation.navigate('Login');
+      navigation.navigate('OnboardingScreen');
     }, 3000);
   };
 
@@ -45,7 +45,7 @@ const Splash = ({navigation}) => {
 
 export default Splash;
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {

@@ -13,8 +13,9 @@ import {
   Switch,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginUser} from '../../redux/reducer/authReducer';
+import {loginUser} from '../../redux/reducer/AuthReducer';
 import { useIsFocused } from '@react-navigation/native';
+const google = require('../../assets/google.png');
 const facebook = require('../../assets/facebook.png');
 const twitter = require('../../assets/twitter.png');
 const linkedin = require('../../assets/linkedin.png');
@@ -129,6 +130,9 @@ useEffect(() => {
         <View style={styles.socialLogin}>
           <Text style={styles.socialText}>Login with</Text>
           <View style={styles.icons}>
+          <TouchableOpacity>
+              <Image source={google} style={styles.icon} />
+            </TouchableOpacity>
             <TouchableOpacity>
               <Image source={facebook} style={styles.icon} />
             </TouchableOpacity>
