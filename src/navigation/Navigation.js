@@ -9,6 +9,7 @@ import DashBoard from '../screen/DashboardScreen/DashBoard';
 import ForgotEmail from '../AuthScreen/ForgotEmailScreen/ForgotEmail';
 import MobileOtp from '../AuthScreen/MobileOtpScreen/MobileOtp';
 import OnboardingScreen from '../screen/SplashScreen/OnboardingScreen';
+import DrawerNavigator from './DrawerNavigator'; // Import the drawer navigator
 
 const Stack = createNativeStackNavigator();
 
@@ -18,17 +19,18 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Splash" component={Splash} />
-      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-
+        <Stack.Screen name="Splash" component={Splash} />
+        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="ForgotEmail" component={ForgotEmail} />
         <Stack.Screen name="MobileOtp" component={MobileOtp} />
         <Stack.Screen name="Dashboard" component={DashBoard} />
+        <Stack.Screen name="Drawer" component={DrawerNavigator} /> {/* Include DrawerNavigator */}
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default Navigation;
+

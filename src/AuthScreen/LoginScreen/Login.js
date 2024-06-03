@@ -114,7 +114,7 @@ useEffect(() => {
             style={[styles.button, styles.shadowProp]}
             onPress={handleLogin}>
             <Text style={styles.buttonText}>
-              {Login ? 'Login' : ' Loading...'}
+              {Loading ? 'Login' : ' Loading...'}
             </Text>
           </TouchableOpacity>
 
