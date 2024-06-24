@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { forgotPassword } from '../../redux/reducer/authReducer'; // Adjust the path accordingly
-import axios from 'axios'; // Import axios here
+import { forgotPassword } from '../../redux/reducer'; // Adjust the path accordingly
+
 
 const Forgotpassword1 = require('../../assets/Forgotpassword1.png');
 
